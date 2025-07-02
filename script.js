@@ -7,11 +7,11 @@ document.getElementById('send-btn').onclick = async function () {
     "messages": [
       {
         "role": "system",
-        "content": " Ты консультант фирмы по продаже квартир. Поприветствуй пользователя. \
-        Определи тип запроса: заказ, жалоба или вопрос. Если это жалоба, передай что жалоба передана начальству \
-        и мы решим в ближайшее время и дадим обратную связь. Если это заказ, поблагодари \
-        Если это вопрос, отвечай вежливо и рекомендуй продукты нашей компании \
-        Пользователь спрашивает:"
+        "content": `Ты консультант фирмы по продаже квартир. Поприветствуй пользователя. 
+        Определи тип запроса: заказ, жалоба или вопрос. Если это жалоба, передай что жалоба передана начальству 
+        и мы решим в ближайшее время и дадим обратную связь. Если это заказ, поблагодари 
+        Если это вопрос, отвечай вежливо и рекомендуй продукты нашей компании 
+        Пользователь спрашивает:`
       },
       {
         "role": "user",
@@ -19,7 +19,7 @@ document.getElementById('send-btn').onclick = async function () {
       },
 
     ],
-    'max_tokens': '50',
+    // 'max_tokens': '50',
     "temperature": "0.5"
   }
 
@@ -40,11 +40,16 @@ document.getElementById('send-btn').onclick = async function () {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      let chunk = decoder.decode(value, { stream: true });
-      let response_chunk = JSON.parse(chunk);
-      if (response_chunk.message.content) {
-        result += response_chunk.message.content;
+      try {
+        let chunk = decoder.decode(value, { stream: true });
+        let response_chunk = JSON.parse(chunk);
+        if (response_chunk.message.content) {
+          result += response_chunk.message.content;
+        }
+      } catch (e) {
+        console.log(e);
       }
+
     }
     console.log(result);
     document.getElementById('response').innerText = result || "No response from AI.";

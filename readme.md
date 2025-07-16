@@ -12,7 +12,7 @@
 ```
 Откройте новый терминал в этой же папке и скачайте модель 
 ```
-./ollama pull lakomoor/vikhr-llama-3.2-1b-instruct:1b
+ollama pull lakomoor/vikhr-llama-3.2-1b-instruct:1b
 ```
 
 

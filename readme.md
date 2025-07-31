@@ -10,7 +10,7 @@ https://ollama.com/download
 
 После установки откройте командную строку (терминал) и скачайте модель 
 ```
-ollama pull lakomoor/vikhr-llama-3.2-1b-instruct:1b
+ollama pull owl/t-lite
 ```
 Список скачанных моделей можно посмотреть с помощью команды 
 ```

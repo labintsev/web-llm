@@ -3,7 +3,7 @@ document.getElementById('send-btn').onclick = async function () {
   document.getElementById('response').innerText = "Thinking...";
 
   request = {
-    "model": "lakomoor/vikhr-llama-3.2-1b-instruct:1b",
+    "model": "owl/t-lite",
     "messages": [
       {
         "role": "system",

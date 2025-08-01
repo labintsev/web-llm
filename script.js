@@ -2,8 +2,11 @@ document.getElementById('send-btn').onclick = async function () {
   const input = document.getElementById('user-input').value;
   document.getElementById('response').innerText = "Thinking...";
 
+  const YA_API_KEY = 'AQVN3MyAcn5YHKvR';
+  const YA_FOLDER_ID = 'b1g8i6bj34avp7';
+
   request = {
-    "model": "owl/t-lite",
+    "model": `gpt://${YA_FOLDER_ID}/yandexgpt/latest`,
     "messages": [
       {
         "role": "system",
@@ -23,12 +26,12 @@ document.getElementById('send-btn').onclick = async function () {
     "temperature": "0.5"
   }
 
-  // Example ollama AI integration 
   try {
-    const response = await fetch('http://localhost:11434/api/chat', {
+    const response = await fetch('https://llm.api.cloud.yandex.net/v1/chat/completions', {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${YA_API_KEY}`,
       },
       body: JSON.stringify(request)
     });

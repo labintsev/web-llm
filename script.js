@@ -1,17 +1,18 @@
 document.getElementById('send-btn').onclick = async function () {
   const input = document.getElementById('user-input').value;
-  document.getElementById('response').innerText = "Thinking...";
+  document.getElementById('response').innerText = "Консультант думает...";
 
   request = {
-    "model": "owl/t-lite",
+    "model": "lakomoor/vikhr-llama-3.2-1b-instruct:1b",
+    // "model": "owl/t-lite",
     "messages": [
       {
         "role": "system",
-        "content": `Ты консультант фирмы по продаже квартир. Поприветствуй пользователя. 
-        Определи тип запроса: заказ, жалоба или вопрос. Если это жалоба, передай что жалоба передана начальству 
-        и мы решим в ближайшее время и дадим обратную связь. Если это заказ, поблагодари 
-        Если это вопрос, отвечай вежливо и рекомендуй продукты нашей компании 
-        Пользователь спрашивает:`
+        "content": `Ты консультант фирмы по продаже квартир. 
+        Отвечай вежливо и профессионально. 
+        В наличии квартира по адресу "ул. Примерная, д. 1, кв. 10",
+        стоимостью 10 миллионов рублей. 
+        Постарайся продать ее.`
       },
       {
         "role": "user",
@@ -19,11 +20,11 @@ document.getElementById('send-btn').onclick = async function () {
       },
 
     ],
-    // 'max_tokens': '50',
-    "temperature": "0.5"
+    'max_tokens': '50', // Максимальное количество токенов
+    "temperature": "0.5" // Температура для генерации текста
   }
 
-  // Example ollama AI integration 
+  // Пример интеграции с ollama AI
   try {
     const response = await fetch('http://localhost:11434/api/chat', {
       method: 'POST',
@@ -33,9 +34,10 @@ document.getElementById('send-btn').onclick = async function () {
       body: JSON.stringify(request)
     });
     
-    // Read the response as a stream
+    // Чтение ответа в виде потока
     const reader = response.body.getReader();
     let result = '';
+    document.getElementById('response').innerText ='';
     const decoder = new TextDecoder();
     while (true) {
       const { done, value } = await reader.read();
@@ -45,21 +47,19 @@ document.getElementById('send-btn').onclick = async function () {
         let response_chunk = JSON.parse(chunk);
         if (response_chunk.message.content) {
           result += response_chunk.message.content;
+          document.getElementById('response').innerText = result;
         }
       } catch (e) {
         console.log(e);
       }
-
     }
-    console.log(result);
-    document.getElementById('response').innerText = result || "No response from AI.";
   } catch (e){
     document.getElementById('response').innerText = "Error contacting AI service.";
     console.log(e);
   }
 };
 
-// Add Enter key support for textarea
+// Обработка нажатия клавиши Enter для ввода в textarea
 document.getElementById('user-input').addEventListener('keydown', function(event) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
